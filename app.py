@@ -8,7 +8,7 @@ env_host = os.environ['PING_HOST']
 
 ping_time = Gauge('ping_time', 'Ping Latency Time')
 ping_status = Gauge('ping_status', 'Host Reachable')
-ping_uptime = Counter('ping_uptime', 'Uptime of host in seconds (updated every 10 seconds)')
+ping_uptime = Counter('ping_uptime', 'Uptime of host in seconds (updated every minute)')
 
 def ping_host(host):
     # TODO: Implement with subprocess and get ping time from output
@@ -25,7 +25,7 @@ def check_host_availability(host):
         return ping_host(host)
     if do_ping():
         ping_status.set(1)
-        ping_uptime.inc(10)
+        ping_uptime.inc(60)
     else:
         ping_status.set(0)
 
@@ -34,7 +34,7 @@ def scheduled_run():
 
 if __name__ == '__main__':
     start_http_server(8000)
-    schedule.every(10).seconds.do(scheduled_run)
+    schedule.every.minute.do(scheduled_run)
     while True:
         schedule.run_pending()
         time.sleep(1)
