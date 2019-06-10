@@ -34,7 +34,7 @@ def scheduled_run():
 
 if __name__ == '__main__':
     start_http_server(8000)
-    schedule.every.minute.do(scheduled_run)
+    schedule.every(1).minutes.do(scheduled_run)
     while True:
         schedule.run_pending()
         time.sleep(1)
